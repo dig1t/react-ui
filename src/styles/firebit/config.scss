@@ -1,0 +1,52 @@
+$primary-color: #4e85fb;
+
+$font-extralight: 200;
+$font-light: 300;
+$font-regular: 400;
+$font-semibold: 600;
+$font-bold: 700;
+$font-black: 900;
+
+$letter-spacing: .08rem;
+$border-radius: .25rem;
+
+$breakpoints: (
+	phone-small: 320px, // 200px
+	phone: 375px, // 300px
+	phone-large: 425px, // 350px
+	
+	tablet-small: 580px, // 400px
+	tablet-medium: 700px, // 530px
+	tablet: 768px, // 650px
+	tablet-large: 860px, // 700px
+	
+	laptop: 1024px, // 780px
+	laptop-medium: 1200px, // 900px
+	laptop-large: 1440px, // 1050px
+	
+	desktop-small: 1600px, // 1300px
+	desktop: 1920px, // 1400px
+	
+	4k: 2560px
+);
+
+$bp-phone-s: 320px;
+$bp-phone: 375px;
+$bp-phone-l: 425px;
+$bp-tablet: 768px;
+$bp-laptop: 1024px;
+$bp-laptop-l: 1440px;
+$bp-desktop-s: 1600px;
+$bp-desktop: 1920px;
+$bp-4k: 2560px;
+
+$social-media-colors: (
+	facebook: #3a5795,
+	messenger: #0084ff,
+	twitter: #55acee,
+	github: #333,
+	google-plus: #d34836,
+	reddit: #ff4500,
+	tumblr: #529ecc,
+	instagram: #4c68d7
+);

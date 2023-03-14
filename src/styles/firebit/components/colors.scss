@@ -1,0 +1,98 @@
+$black: #404050;
+$light-gray: #a9b9bf;
+$gray: #939393;
+$blue-gray: #737f8c;
+$dark-gray: #535353;
+$white: #fff;
+
+$red: #e74c3c;
+$orange: #f98311;
+$yellow: #e2d015;
+$green: #29cc4b;
+$blue: #4e85fb;
+$purple: #9e15cc;
+$pink: #cc157a;
+
+$neon-red: #ff1800;
+$neon-orange: #ffaf37;
+$neon-yellow: #eaff00;
+$neon-green: #00ff42;
+$neon-blue-green: #00ff84;
+$neon-blue: #0019ff;
+$neon-purple: #4400ff;
+$neon-pink: #ff0068;
+
+$baseColors: (
+	// Grayscale
+	black: $black,
+	light-gray: $light-gray,
+	gray: $gray,
+	blue-gray: $blue-gray,
+	dark-gray: $dark-gray,
+	white: $white,
+	
+	// Colors
+	red: $red,
+	orange: $orange,
+	yellow: $yellow,
+	green: $green,
+	blue: $blue,
+	purple: $purple,
+	pink: $pink,
+	
+	// Neon Colors
+	neon-red: $neon-red,
+	neon-orange: $neon-orange,
+	neon-yellow: $neon-yellow,
+	neon-green: $neon-green,
+	neon-blue-green: $neon-blue-green,
+	neon-blue: $neon-blue,
+	neon-purple: $neon-purple,
+	neon-pink: $neon-pink
+);
+$colors: ();
+
+@each $color, $hex in $baseColors {
+	$variance: 30;
+	
+	@for $i from 1 through 4 {
+		$percent: calc($variance - (($variance / 4) * ($i - 1)));
+		$lightShade: $i * 100;
+		$darkShade: calc((10 - $i) * 100);
+		
+		$colors: map-merge($colors, (
+			#{$color}-#{$lightShade}: lighten($hex, $percent),
+			#{$color}-#{$darkShade}: darken($hex, $percent)
+		));
+	}
+	
+	$colors: map-merge($colors, (
+		#{$color}-50: lighten($hex, 40),
+		#{$color}-#{500}: $hex,
+		#{$color}: $hex
+	));
+}
+
+@function color-hex($name, $shade: 500) {
+	@return map-get($colors, "#{$name}-#{$shade}");
+}
+
+@function color($name, $shade: 500) {
+	@return var(--#{$name}-#{$shade});
+}
+
+@each $color, $value in $colors {
+	.bg-#{$color} {
+		background-color: $value;
+	}
+	
+	.text-#{$color} {
+		color: $value;
+	}
+}
+
+:root {
+	@each $color, $value in $colors {
+		--#{$color}: #{$value};
+	}
+}

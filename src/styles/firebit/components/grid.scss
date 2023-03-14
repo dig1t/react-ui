@@ -1,0 +1,141 @@
+/* Grid
+** Only divs allowed
+** Reference: https://medium.com/p/e5c7cc9d28e */
+
+$grid-gutter: 15px;
+$grid-columns: 12;
+
+$grid-breakpoints: (
+	// breakpoint: prefix (biggest to smallest screen size)
+	tablet-large: tablet,
+	laptop: laptop,
+	desktop-small: desktop
+);
+
+$columns: ();
+
+@mixin _create-offset($suffix, $width) {
+	$property-push: #{'.offset-'}#{$suffix};
+	$property-push-r: #{'.offset-r-'}#{$suffix};
+	
+	/* Add padding for grid items instead of margin to
+	** since they have already padding */
+	div[class^="col-"], div[class~="grid"] {
+		#{$property-push} {
+			margin-left: $width;
+		}
+		
+		#{$property-push-r} {
+			margin-right: $width;
+		}
+	}
+	
+	/* Use padding rather than margin to avoid
+	** sizing problems with gutter grids */
+	div[class~="grid-g"] {
+		&#{$property-push} {
+			padding-left: $width;
+		}
+		
+		&#{$property-push-r} {
+			padding-right: $width;
+		}
+	}
+}
+
+// Gutter has -g suffix
+div.grid {
+	&, &-g {
+		width: 100%;
+		display: flex;
+		flex-flow: row wrap;
+		
+		&.align-center {
+			align-items: center;
+		}
+		
+		&.align-bottom {
+			align-items: flex-end;
+		}
+	}
+	
+	&-g {
+		margin-left: calc($grid-gutter / -2);
+		margin-right: calc($grid-gutter / -2);
+	}
+}
+
+// Create normal columns and offsets first
+@for $i from $grid-columns through 1 {
+	$property: #{'.col-'}#{$i};
+	$width: percentage(calc($i / $grid-columns));
+	
+	div#{$property} {
+		// grow | shrink | basis
+		//flex: 0 0 $width;
+		flex-basis: $width;
+	}
+	
+	$columns: append($columns, div#{$property}, comma);
+	
+	// automatically add gutters
+	div.grid-g > div#{$property} {
+		padding-left: calc($grid-gutter / 2);
+		padding-right: calc($grid-gutter / 2);
+	}
+	
+	@include _create-offset($i, $width);
+}
+
+@include _create-offset('auto', auto!important);
+
+// Override normal classes with media queries
+@for $i from $grid-columns through 0 {
+	$width: percentage(calc($i / $grid-columns));
+	
+	@include breakpoint(phone-large, 'max-width') {
+		@if $i > 0 {
+			div.col-phone-#{$i} {
+				flex-basis: $width;
+			}
+		}
+		
+		@include _create-offset(#{'phone-'}#{$i}, $width);
+	}
+	
+	@each $breakpoint, $prefix in $grid-breakpoints {
+		$col-prop: #{'div.col-'}#{$prefix}#{'-'}#{$i};
+		
+		@if $i > 0 {
+			$columns: append($columns, #{$col-prop}, comma);
+		}
+		
+		@include breakpoint($breakpoint, 'min-width') {
+			@if $i > 0 {
+				#{$col-prop} {
+					flex-basis: $width;
+				}
+			}
+		}
+	}
+}
+
+// Override normal classes with media queries
+@each $breakpoint, $prefix in $grid-breakpoints {
+	@include breakpoint($breakpoint, 'min-width') {
+		@include _create-offset(#{$prefix}#{'-auto'}, auto!important);
+	}
+	
+	@for $i from 0 through $grid-columns {
+		$width: percentage(calc($i / $grid-columns));
+		
+		@include breakpoint($breakpoint, 'min-width') {
+			@include _create-offset(#{$prefix}#{'-'}#{$i}, $width);
+		}
+	}
+}
+
+#{$columns} {
+	min-height: 1px;
+	overflow: hidden;
+}

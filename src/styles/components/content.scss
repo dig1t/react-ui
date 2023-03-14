@@ -1,0 +1,285 @@
+.post {
+	&:hover .options {
+		display: block;
+		opacity: 1;
+	}
+	
+	.options {
+		position: absolute;
+		top: 0;
+		right: 0;
+		cursor: pointer;
+		display: none;
+		opacity: 0;
+		transition-duration: .2s;
+		
+		&:hover .icon {
+			color: var(--text-color-secondary);
+		}
+		
+		.icon {
+			height: 2.4rem;
+		}
+	}
+	
+	.container {
+		padding: 1rem;
+		display: flex;
+		
+		.post-avatar {
+			margin-right: 1rem;
+			flex-basis: 2.8rem;
+		}
+		
+		.main {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: .4rem;
+			
+			.details {
+				color: var(--text-color-light);
+				font-size: .9rem;
+				display: flex;
+				align-items: baseline;
+				position: relative;
+				
+				.name {
+					color: var(--text-color);
+					font-size: 1.1rem;
+					font-weight: $font-bold;
+				}
+				
+				> *:not(:last-child) {
+					margin-right: .3rem;
+				}
+			}
+			
+			.content {
+				padding-bottom: .4rem;
+				
+				.text {
+					font-size: .9rem;
+					letter-spacing: .02rem;
+				}
+				
+				.media {
+					margin-top: 1rem;
+					overflow: hidden;
+					
+					> * {
+						border-radius: $border-radius;
+					}
+					
+					> img {
+						max-width: 100%;
+						max-height: 24rem;
+						user-select: none;
+					}
+					
+					.album-wrap {
+						max-height: 24rem;
+						max-width: 100%;
+						aspect-ratio: .8;
+					}
+				}
+			}
+			
+			.actions {
+				color: var(--blue-gray-200);
+				font-size: 1rem;
+				display: flex;
+				gap: 1rem;
+				transition-duration: .2s;
+				
+				.action {
+					cursor: pointer;
+					display: flex;
+					
+					&:not(.selected):hover {
+						color: var(--blue-gray-400);
+					}
+					
+					&.selected {
+						color: var(--blue-gray-400);
+						font-weight: $font-semibold;
+					}
+					
+					&.like.selected .icon {
+						color: var(--red-600);
+					}
+				}
+				
+				.icon {
+					height: 1.6rem;
+					margin-right: .3rem;
+				}
+			}
+		}
+	}
+	
+	&.comment {
+		.post-avatar {
+			flex-basis: 2.4rem;
+		}
+		
+		.details {
+			.name {
+				font-size: 1rem;
+			}
+			
+			.username {
+				font-size: .8rem;
+			}
+		}
+	}
+}
+
+.post-editor {
+	.box {
+    	background-color: var(--light-gray-200);
+		border: 0.1rem solid transparent;
+    	padding: .8rem;
+		transition-duration: .1s;
+		
+		&:has(.input-focused) {
+			border-color: var(--primary-color);
+		}
+	}
+	
+	.input textarea {
+		min-height: 4rem;
+		background-color: transparent;
+		margin-bottom: .4rem;
+		border: 0;
+		padding: 0;
+		font-weight: $font-semibold;
+		
+		&::placeholder {
+			color: var(--blue-gray-200);
+		}
+	}
+	
+	.editor-controls {
+		padding-left: .2rem;
+		display: flex;
+		justify-content: space-between;
+		
+		.attachments {
+			> * {
+				color: var(--blue-gray-300);
+				display: inline-flex;
+				cursor: pointer;
+				transition-duration: .2s;
+				
+				&:hover {
+					color: var(--blue-gray-600);
+				}
+			}
+			
+			.icon {
+				height: 1.4rem;
+			}
+		}
+		
+		> button.post {
+			padding: .6rem 1.4rem;
+		}
+	}
+	
+	&.simple {
+		.input {
+			textarea {
+				min-height: 2rem;
+			}
+		}
+	}
+}
+
+.avatar {
+	position: relative;
+	
+	&-wrap {
+		width: 100%;
+		height: 100%;
+		border-radius: 100%;
+		position: absolute;
+		top: 0;
+	}
+	
+	.border {
+		width: inherit;
+		height: inherit;
+		//background-color: #fff;
+		border-radius: 100%;
+		//padding: .1rem; // disables border
+		position: relative;
+		
+		.img {
+			border-radius: 100%;
+		}
+		
+		.activity-status {
+			width: 30%;
+			height: 30%;
+			border: 1px solid var(--color-white);
+			border-radius: 100%;
+			position: absolute;
+			right: -.5%;
+			bottom: -.5%;
+			z-index: 2;
+			
+			&.online {
+				background-color: var(--green-600);
+			}
+			
+			&.offline {
+				background-color: var(--blue-gray-300);
+			}
+			
+			&.away {
+				background-color: var(--orange-400);
+			}
+			
+			&.busy {
+				background-color: var(--red-600);
+			}
+		}
+		
+		svg {
+			width: 116%;
+			height: 116%;
+			position: absolute;
+			top: -8%;
+			left: -8%;
+			fill: var(--blue);
+		}
+	}
+}
+
+.cat-pills {
+	padding-bottom: var(--box-spacing);
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	gap: .4rem;
+	
+	.pill {
+		color: var(--blue-gray-600);
+		background-color: var(--blue-gray-100);
+		font-size: .8rem;
+		font-weight: $font-semibold;
+		padding: .5rem 1rem;
+		
+		&.active {
+			color: #fff;
+			background-color: var(--primary-color);
+			cursor: default;
+		}
+		
+		&:not(.active):hover {
+			color: var(--blue-gray-900);
+			background-color: var(--blue-gray-200);
+		}
+	}
+}

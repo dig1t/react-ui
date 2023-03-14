@@ -1,0 +1,275 @@
+* {
+	background: transparent;
+	color: inherit;
+	margin: 0;
+	border: 0;
+	padding: 0;
+	font-family: inherit;
+	
+	&, &:before, &:after {
+		box-sizing: border-box;
+	}
+	
+	&:focus {
+		outline: none;
+	}
+}
+
+body {
+	zoom: 0;
+	font-size: 62.5%;
+	-webkit-font-smoothing: antialiased;
+}
+
+section, footer {
+	position: relative;
+	overflow: hidden;
+}
+
+a, em, p, strong, u {
+	font-size: inherit;
+	line-height: inherit;
+}
+
+a {
+	color: var(--blue-700);
+	text-decoration: none;
+	
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+img {
+	display: block;
+	-webkit-user-drag: none;
+}
+
+button {
+	cursor: pointer;
+}
+
+button > a {
+	color: inherit;
+}
+
+select, input, textarea {
+	color: var(--black);
+	background-color: #fff;
+	width: 100%;
+	border: 1px solid var(--gray-200);
+	padding: 6px;
+	font-size: type-scale(0);
+	display: block;
+	
+	&:focus {
+		border-color: $black;
+	}
+}
+
+input, textarea {
+	&::placeholder {
+		color: var(--blue-gray-200);
+	}
+}
+
+textarea {
+	resize: none;
+}
+
+input {
+	&.ok {
+		border-color: var(--green);
+	}
+	
+	&.error {
+		border-color: var(--red);
+	}
+	
+	&[type="submit"] {
+		color: #fff;
+		background-color: var(--blue);
+		border: 0;
+		border-radius: 0;
+		padding: 6px 12px;
+		font-size: 18px;
+		cursor: pointer;
+		
+		&:hover {
+			background-color: var(--blue-700);
+		}
+	}
+	
+	&[type="checkbox"], &[type="radio"] {
+		width: 18px;
+		height: 18px;
+		position: relative;
+		cursor: pointer;
+		
+		&:focus {
+			box-shadow: none;
+		}
+		
+		&:before {
+			content: '';
+			background-color: inherit;
+			width: 18px;
+			height: 18px;
+			position: absolute;
+		}
+	}
+	
+	&[type="checkbox"] {
+		&:before {
+			background-position: -304px 0;
+		}
+		
+		&:hover:before {
+			background-position: -304px -18px;
+		}
+		
+		&:checked:before {
+			background-position: -304px -36px;
+		}
+		
+		&[disabled] {
+			cursor: auto;
+			
+			&:before {
+				background-position: -304px -54px;
+			}
+			
+			&:checked:before {
+				background-position: -304px -72px;
+			}
+			
+			&.dark {
+				&:before {
+					background-position: -304px -90px;
+				}
+				
+				&:checked:before {
+					background-position: -304px -108px;
+				}
+			}
+		}
+		
+		&.dark:before {
+			background-position: -304px -126px;
+		}
+	}
+	
+	&[type="radio"] {
+		&:before {
+			background-position: -322px 0;
+		}
+		
+		&:hover:before {
+			background-position: -322px -18px;
+		}
+		
+		&:checked:before {
+			background-position: -322px -36px;
+		}
+		
+		&[disabled] {
+			cursor: auto;
+			
+			&:before {
+				background-position: -322px -54px;
+			}
+			
+			&:checked:before {
+				background-position: -322px -72px;
+			}
+			
+			.dark {
+				&:before {
+					background-position: -322px -90px;
+				}
+				
+				&:checked:before {
+					background-position: -322px -108px;
+				}
+			}
+		}
+		
+		&.dark:before {
+			background-position: -322px -126px;
+		}
+	}
+}
+
+label {
+	display: block;
+	
+	input[type="checkbox"], input[type="radio"] {
+		margin-right: 2px;
+		display: inline-block;
+	}
+	
+	span {
+		display: block;
+		//vertical-align: middle;
+	}
+}
+
+li {
+	list-style-type: none;
+}
+
+table {
+	background-color: transparent;
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+td, th {
+	background: $white;
+	margin: 4px;
+	border-bottom: 1px solid var(--gray-200);
+	padding: 8px 12px;
+	font-size: type-scale(0);
+	text-align: left;
+	
+	&:first-child {
+		padding-left: 0;
+	}
+}
+
+@include breakpoint(phone-large) {
+	td, th {
+		padding: 4px 8px;
+	}
+}
+
+// Pseudo Styles
+
+::selection {
+	background-color: transparentize(color-hex(blue), .4);
+	color: #fff;
+}
+
+::-webkit-scrollbar {
+	width: 16px;
+}
+
+::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb {
+	border: 4px solid transparent;
+	background-clip: padding-box;
+	border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background-color: transparentize(color-hex(blue-gray, 50), .4);
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: transparentize(color-hex(blue-gray, 200), .4);
+	transition-duration: .2s;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+	background-color: transparentize(color-hex(blue-gray, 100), .4);
+}

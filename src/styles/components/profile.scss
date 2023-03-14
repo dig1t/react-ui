@@ -1,0 +1,144 @@
+.profile {
+	$avatarSize: 8rem;
+	
+	.info {
+		.banner {
+			width: 100%;
+			height: 14rem;
+			
+			.img {
+				background-image: url(/assets/temp/banner.gif); //placeholder
+				background-size: cover;
+				user-select: none;
+			}
+		}
+		
+		.avatar-container {
+			width: $avatarSize;
+			margin-top: -$avatarSize;
+		}
+		
+		.details {
+			padding-top: calc(calc($avatarSize / 2) - 1.2rem);
+			margin: 1.2rem;
+			padding-top: 2.8rem;
+			position: relative;
+			
+			button.cta {
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+			
+			.container {
+				margin-top: 1.4rem;
+			}
+			
+			.name {
+				margin-bottom: .3rem;
+				font-weight: $font-semibold;
+				font-size: 1.6rem;
+				line-height: 1.4rem;
+				
+				.icon-verified {
+					height: 1.4rem;
+				}
+			}
+			
+			.username {
+				color: var(--text-color-light);
+				margin-bottom: .6rem;
+				font-size: 1rem;
+				line-height: .9rem;
+			}
+			
+			.bio {
+				font-size: 1rem;
+				line-height: 1.2rem;
+				
+				&:not(:last-child) {
+					margin-bottom: .2rem;
+				}
+			}
+			
+			.website {
+				font-size: 1rem;
+			}
+		}
+		
+		.community-stats {
+			padding: .4rem;
+			padding-top: 0;
+			
+			.stat {
+				border-radius: .4rem;
+				padding: .4rem;
+				text-align: center;
+				cursor: pointer;
+				//transition-duration: .1s;
+				
+				.value {
+					margin-bottom: .04rem;
+					font-size: 1rem;
+					font-weight: $font-bold;
+				}
+				
+				.label {
+					color: var(--text-color-secondary);
+					font-size: .8rem;
+					letter-spacing: .03rem;
+				}
+				
+				/*&:hover {
+					background: rgba(0, 0, 0, .1);
+				}*/
+			}
+		}
+	}
+	
+	.feed {
+		.cat-pills {
+			$pill-height: .2rem;
+			
+			padding: .4rem;
+			padding-bottom: $pill-height;
+			gap: .2rem;
+			
+			.pill {
+				color: var(--text-color-secondary);
+				background-color: transparent;
+				padding: .8rem .6rem;
+				padding-bottom: calc(.8rem + $pill-height);
+				font-size: 1rem;
+				flex: 1;
+				position: relative;
+				
+				&:not(.active):hover {
+					background-color: var(--box-color-dark);
+				}
+				
+				&.active {
+					color: var(--text-color);
+					font-weight: $font-bold;
+					
+					&:after {
+						content: '';
+						width: 100%;
+						height: $pill-height;
+						background-color: var(--primary-color);
+						border-radius: $pill-height;
+						position: absolute;
+						bottom: 0; //-$pill-height;
+						left: 0;
+					}
+				}
+			}
+		}
+		
+		.list {
+			display: flex;
+			flex-direction: column;
+			gap: .4rem;
+		}
+	}
+}

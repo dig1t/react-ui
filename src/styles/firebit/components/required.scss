@@ -1,0 +1,55 @@
+@mixin breakpoint($point, $property: 'max-width') {
+	@if map-has-key($breakpoints, $point) {
+		$point: map-get($breakpoints, $point);
+	}
+	
+	@media (#{$property}: #{$point}) { @content; }
+}
+
+@mixin gradient($begin, $end, $deg: 0) {
+	background-color: $begin;
+	background-image: linear-gradient($deg, $begin, $end);
+}
+
+$base-url: '/assets';
+
+@function img($file) {
+	@return url(#{$base-url}/i/#{$file});
+}
+
+$base-font-size: 1rem;
+
+$type-scale: ();
+$type-scale-ratio: 1.618; // fibonacci
+$type-scale-base: $base-font-size;
+
+/* 15 ts(0)
+** 24.27	ts(1)
+** 39.26	ts(2)
+** 63.53	ts(3)
+** 102.8	ts(4)
+** 166.33 ts(5)
+** 269.13 ts(6) */
+
+@function type-scale($steps) {
+	@if $steps == 0 {
+		@return $type-scale-base;
+	}
+	
+	$type-scale-result: $type-scale-base;
+	
+	@for $i from 1 through $steps {
+		$type-scale-result: $type-scale-result * $type-scale-ratio;
+	}
+	
+	@return calc(round($type-scale-result * 20) / 20); // round to the nearest hundredth
+}
+
+$headers: (
+	h1: calc(round(type-scale(1) * 2.6 * 20) / 20),
+	h2: calc(round(type-scale(1) * 2.2 * 20) / 20),
+	h3: calc(round(type-scale(1) * 1.8 * 20) / 20),
+	h4: calc(round(type-scale(1) * 1.4 * 20) / 20),
+	h5: calc(round(type-scale(1) * 1 * 20) / 20),
+	h6: calc(round(type-scale(1) * .6 * 20) / 20)
+);
