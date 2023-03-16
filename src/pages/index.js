@@ -1,5 +1,11 @@
-import Tooltip from '@/components/UI/Tooltip.js'
+import Tooltip from '../components/UI/Tooltip.js'
 import Modal from '../components/UI/Modal.js'
+
+import DropMenu, { ItemMenu, Item } from '../components/UI/ItemMenu.js'
+
+const Menu = <ItemMenu text="hello world">
+  <Item redirect="#asd">asd</Item>
+</ItemMenu>
 
 export default function Home() {
   
@@ -43,6 +49,10 @@ export default function Home() {
         <Tooltip text="hello world">
           <button>tooltip</button>
         </Tooltip>
+        
+        <DropMenu menu={Menu}>
+          <button>itemmenu</button>
+        </DropMenu>
       </div>
     </div>
   )

@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 const getDOMRoot = () => {
-	const res = document.getElementById('modal-root')
+	const res = document.getElementById('ui-root')
 	
 	if (res) return res
 	
 	const root = document.createElement('div')
-	root.setAttribute('id', 'modal-root')
+	root.setAttribute('id', 'ui-root')
 	document.body.appendChild(root)
 	
 	return root
