@@ -15,9 +15,8 @@ const getDOMRoot = () => {
 	return root
 }
 
-const ModalPortal = props => {
+const Modal = props => {
 	const root = useRef(null)
-	const [open, setOpen] = useState(false)
 	
 	useEffect(() => {
 		// Mounted
@@ -33,47 +32,66 @@ const ModalPortal = props => {
 		}
 	}, [props])
 	
-	return root.current !== null ? ReactDOM.createPortal(
-		<>
-			{open && <div className={classNames('modal', `modal-${props.type}`)}>
-				<div className="background-close" onClick={this.props.toggleModal} />
-				<button className="close fas fa-times" onClick={this.props.toggleModal} />
-				<div className="align">
-					<div className="container">
-						<div className="main">
-							{ this.getHeader() }
-							<div className="content">{content}</div>
-							{ this.getFooter() }
-						</div>
+	
+	return root.current !== null && props.open ? ReactDOM.createPortal(
+		<div
+			className={classNames(
+				'modal',
+				`modal-${props.type}`
+			)}
+		>
+			<div className="background-close" onClick={input => {
+				console.log(input)
+				props.toggleModal()
+			}} />
+			<button className="close fas fa-times" onClick={props.toggleModal} />
+			<div className="align">
+				<div className="container">
+					<div className="main">
+						<div className="content">{modalComponent}</div>
 					</div>
 				</div>
-			</div>}
-		</>,
+			</div>
+		</div>,
 		root.current
 	) : <></>
 }
 
-const Modal = props => {
+Modal.propTypes = {
+	open: PropTypes.bool.isRequired,
+	toggleModal: PropTypes.func.isRequired
+}
+
+const ModalWrap = props => {
+	if (props.inlineTrigger === false && typeof props.open !== Boolean) {
+		throw new Error('ModalWrap - Custom triggers must include an "open" prop')
+	}
+	
 	const [open, setOpen] = useState(false)
 	
-	return <div
-		className="modal-btn"
-		onClick={() => setOpen(!open)}
+	return props.inlineTrigger ? <span
+		onClick={() => setOpen(prevState => {
+			return !prevState
+		})}
 	>
-		<ModalPortal
-			{...props} open={open}
+		<Modal
+			toggleModal={() => setOpen(!open)}
+			{...props}
+			open={open}
 		/>
 		{props.children}
-	</div>
+	</span> : props.children
 }
 
-Modal.defaultProps = {
-	open: false
+ModalWrap.defaultProps = {
+	inlineTrigger: true
 }
 
-Modal.propTypes = {
+ModalWrap.propTypes = {
 	type: PropTypes.string.isRequired,
-	component: PropTypes.func
+	component: PropTypes.func,
+	inlineTrigger: PropTypes.bool
 }
 
-export default Modal
+export { Modal }
+export default ModalWrap

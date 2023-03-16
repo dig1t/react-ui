@@ -1,3 +1,4 @@
+import Tooltip from '@/components/UI/Tooltip.js'
 import Modal from '../components/UI/Modal.js'
 
 export default function Home() {
@@ -15,16 +16,14 @@ export default function Home() {
             console.log('show tooltip')
           }}>tooltip</button>
           
-          
-            <button
-              onMouseEnter={() => {
-                console.log('show tooltip on hover')
-              }}
-              
-              onMouseLeave={() => {
-                console.log('hide tooltip on leave')
-              }}
-            >hover tooltip</button>
+          <button
+            onMouseEnter={() => {
+              console.log('show tooltip on hover')
+            }}
+            onMouseLeave={() => {
+              console.log('hide tooltip on leave')
+            }}
+          >hover tooltip</button>
         </div>
         
         <div className="grid p-y-2">
@@ -37,6 +36,13 @@ export default function Home() {
             }}>modal</button>
           </Modal>
         </div>
+        
+        <Tooltip text="hello world">
+          <button>tooltip</button>
+        </Tooltip>
+        <Tooltip text="hello world">
+          <button>tooltip</button>
+        </Tooltip>
       </div>
     </div>
   )

@@ -100,22 +100,21 @@ ui {
 }
 
 // Tooltip
-
-$tooltip-color: rgba(0, 25, 50, .5);
-$tooltip-padding: 5px;
+$tooltip-color: rgba(0, 25, 50, .8);
+$tooltip-padding: .4rem;
 
 .tooltip {
 	background-color: $tooltip-color;
 	border-radius: $border-radius;
-	padding: $tooltip-padding;
+	padding: $tooltip-padding calc($tooltip-padding * 2);
 	text-align: center;
 	position: fixed;
-	display: none;
 	z-index: 999999999;
 	
 	span {
 		color: #fff;
-		font-size: 12px;
+		font-size: .8rem;
+		font-weight: 500;
 	}
 	
 	.nub:after {
@@ -126,7 +125,7 @@ $tooltip-padding: 5px;
 		position: absolute;
 	}
 	
-	.top:after {
+	&.top .nub:after {
 		bottom: 100%;
 		left: 50%;
 		margin-left: -$tooltip-padding;
@@ -134,7 +133,7 @@ $tooltip-padding: 5px;
 		border-width: $tooltip-padding;
 	}
 	
-	.bottom:after {
+	&.bottom .nub:after {
 		top: 100%;
 		left: 50%;
 		margin-left: -$tooltip-padding;
@@ -142,7 +141,7 @@ $tooltip-padding: 5px;
 		border-width: $tooltip-padding;
 	}
 	
-	.left:after {
+	&.left .nub:after {
 		right: 100%;
 		top: 50%;
 		margin-top: -$tooltip-padding;
@@ -150,7 +149,7 @@ $tooltip-padding: 5px;
 		border-width: $tooltip-padding;
 	}
 	
-	.right:after {
+	&.right .nub:after {
 		left: 100%;
 		top: 50%;
 		margin-top: -$tooltip-padding;
@@ -160,7 +159,6 @@ $tooltip-padding: 5px;
 }
 
 // Modal
-
 .modal {
 	background-color: transparentize($black, .4);
 	width: 100%;
