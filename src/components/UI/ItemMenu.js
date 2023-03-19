@@ -30,9 +30,12 @@ const Menu = (props, ref) => {
 	const menuElement = useRef()
 	const [position, setPosition] = useState('top')
 	const [pos, setPos] = useState({ x: 0, y: 0 })
+	const [mounted, setMounted] = useState(false)
 	
 	useEffect(() => {
 		root.current = getDOMRoot()
+		
+		setMounted(true)
 		
 		if (!menuElement.current || !props.parentRef.current) return
 		
@@ -67,7 +70,7 @@ const Menu = (props, ref) => {
 		setPosition(newPosition)
 	}, [props, menuElement, ref])
 	
-	return root.current !== undefined ? ReactDOM.createPortal(
+	return root.current ? ReactDOM.createPortal(
 		<div
 			ref={menuElement}
 			className={classNames('drop-menu', position)}

@@ -22,9 +22,11 @@ const Tooltip = (props, ref) => {
 	const tooltipElement = useRef()
 	const [nubPosition, setNubPosition] = useState('top')
 	const [pos, setPos] = useState({ x: 0, y: 0 })
+	const [mounted, setMounted] = useState(false)
 	
 	useEffect(() => {
 		root.current = getDOMRoot()
+		setMounted(true)
 		
 		if (!tooltipElement.current || !props.parentRef.current) return
 		
@@ -59,7 +61,7 @@ const Tooltip = (props, ref) => {
 		setNubPosition(newNubPosition)
 	}, [props, tooltipElement, ref])
 	
-	return root.current !== undefined && props.open ? ReactDOM.createPortal(
+	return mounted && props.open ? ReactDOM.createPortal(
 		<div
 			ref={tooltipElement}
 			className={classNames('tooltip', nubPosition)}

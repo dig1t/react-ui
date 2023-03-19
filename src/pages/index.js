@@ -18,21 +18,6 @@ export default function Home() {
         }}
       >
         <div className="grid p-y-2">
-          <button onClick={() => {
-            console.log('show tooltip')
-          }}>tooltip</button>
-          
-          <button
-            onMouseEnter={() => {
-              console.log('show tooltip on hover')
-            }}
-            onMouseLeave={() => {
-              console.log('hide tooltip on leave')
-            }}
-          >hover tooltip</button>
-        </div>
-        
-        <div className="grid p-y-2">
           <Modal
             type="image"
             image="https://i.imgur.com/bgqfx8U.png"
@@ -43,16 +28,20 @@ export default function Home() {
           </Modal>
         </div>
         
-        <Tooltip text="hello world">
-          <button>tooltip</button>
-        </Tooltip>
-        <Tooltip text="hello world">
-          <button>tooltip</button>
-        </Tooltip>
+        <div className="grid p-y-2">
+          <Tooltip text="hello world">
+            <button>tooltip</button>
+          </Tooltip>
+          <Tooltip text="hello world">
+            <button>tooltip</button>
+          </Tooltip>
+        </div>
         
-        <DropMenu menu={Menu}>
-          <button>itemmenu</button>
-        </DropMenu>
+        <div className="grid p-y-2">
+          <DropMenu menu={Menu}>
+            <button>itemmenu</button>
+          </DropMenu>
+        </div>
       </div>
     </div>
   )

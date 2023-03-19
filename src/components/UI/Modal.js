@@ -16,11 +16,13 @@ const getDOMRoot = () => {
 }
 
 const Modal = props => {
-	const root = useRef(null)
+	const root = useRef()
+	const [mounted, setMounted] = useState(false)
 	
 	useEffect(() => {
 		// Mounted
 		root.current = getDOMRoot()
+		setMounted(true)
 	}, [])
 	
 	const modalComponent = useMemo(() => {
@@ -33,7 +35,7 @@ const Modal = props => {
 	}, [props])
 	
 	
-	return root.current !== null && props.open ? ReactDOM.createPortal(
+	return mounted && props.open ? ReactDOM.createPortal(
 		<div
 			className={classNames(
 				'modal',
