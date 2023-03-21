@@ -32,8 +32,17 @@ export default function Home() {
           <Tooltip text="hello world">
             <button>tooltip</button>
           </Tooltip>
-          <Tooltip text="hello world">
-            <button>tooltip</button>
+          <Tooltip text="hello world" position="top">
+            <button>tooltip top</button>
+          </Tooltip>
+          <Tooltip text="hello world" position="bottom">
+            <button>tooltip bottom</button>
+          </Tooltip>
+          <Tooltip text="hello world" position="left">
+            <button>tooltip left</button>
+          </Tooltip>
+          <Tooltip text="hello world" position="right">
+            <button>tooltip right</button>
           </Tooltip>
         </div>
         

@@ -1,33 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
-import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+import Portal from './Portal.js'
+
 const TOOLTIP_OFFSET = 10
 
-const getDOMRoot = () => {
-	const res = document.getElementById('ui-root')
-	
-	if (res) return res
-	
-	const root = document.createElement('div')
-	root.setAttribute('id', 'ui-root')
-	document.body.appendChild(root)
-	
-	return root
-}
-
 const Tooltip = (props, ref) => {
-	const root = useRef()
 	const tooltipElement = useRef()
-	const [nubPosition, setNubPosition] = useState('top')
+	const [nubPosition, setNubPosition] = useState(props.position)
 	const [pos, setPos] = useState({ x: 0, y: 0 })
-	const [mounted, setMounted] = useState(false)
 	
 	useEffect(() => {
-		root.current = getDOMRoot()
-		setMounted(true)
-		
 		if (!tooltipElement.current || !props.parentRef.current) return
 		
 		const parentRect = props.parentRef.current.getBoundingClientRect()
@@ -39,19 +23,23 @@ const Tooltip = (props, ref) => {
 		let y = parentRect.top - height - TOOLTIP_OFFSET
 		let newNubPosition = 'bottom'
 		
-		if (y < 0) {
+		if (props.position === 'bottom' || (!props.position && y < 0)) {
 			y = parentRect.top + parentRect.height + TOOLTIP_OFFSET
 			x = (parentRect.left + (parentRect.width / 2)) - (width / 2)
 			newNubPosition = 'top'
 		}
 		
-		if (x > window.innerWidth || tooltipElement.current.offsetWidth + x > window.innerWidth) {
+		if (props.position === 'left' || (!props.position && (
+			x > window.innerWidth || tooltipElement.current.offsetWidth + x > window.innerWidth
+		))) {
 			x = parentRect.left - width - TOOLTIP_OFFSET
 			y = parentRect.top - (height / 2) + (parentRect.height / 2)
 			newNubPosition = 'right'
 		}
 		
-		if (x < 0 || tooltipElement.current.offsetWidth + x > window.innerWidth) {
+		if (props.position === 'right' || (!props.position && (
+			x < 0 || tooltipElement.current.offsetWidth + x > window.innerWidth
+		))) {
 			x = parentRect.left + parentRect.width + TOOLTIP_OFFSET
 			y = parentRect.top - (height / 2) + (parentRect.height / 2)
 			newNubPosition = 'left'
@@ -61,24 +49,23 @@ const Tooltip = (props, ref) => {
 		setNubPosition(newNubPosition)
 	}, [props, tooltipElement, ref])
 	
-	return mounted && props.open ? ReactDOM.createPortal(
-		<div
+	return <Portal>
+		{props.open ? <div
 			ref={tooltipElement}
 			className={classNames('tooltip', nubPosition)}
 			style={{ left: pos.x, top: pos.y }}
 		>
 			<div className="nub" />
 			<span>{props.text}</span>
-		</div>,
-		root.current
-	) : <></>
+		</div> : <></>}
+	</Portal>
 }
 
 Tooltip.propTypes = {
 	open: PropTypes.bool.isRequired,
 	text: PropTypes.string.isRequired,
 	parentRef: PropTypes.object.isRequired,
-	position: PropTypes.number
+	position: PropTypes.string
 }
 
 const TooltipWrap = props => {
@@ -91,14 +78,8 @@ const TooltipWrap = props => {
 	
 	return props.inlineTrigger ? <span
 		ref={ref}
-		
-		onMouseEnter={() => {
-			setOpen(true)
-		}}
-		
-		onMouseLeave={() => {
-			setOpen(false)
-		}}
+		onMouseEnter={() => setOpen(true)}
+		onMouseLeave={() => setOpen(false)}
 	>
 		<Tooltip
 			{...props}
