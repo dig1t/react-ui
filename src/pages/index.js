@@ -1,7 +1,7 @@
 import Tooltip from '../components/UI/Tooltip.js'
 import Modal from '../components/UI/Modal.js'
 
-import DropMenu, { ItemMenu, Item, ItemDivider } from '../components/UI/ItemMenu.js'
+import DropMenu, { ItemMenu, Item, ItemDivider } from '../components/UI/DropMenu.js'
 
 const Menu = <ItemMenu>
   <Item link="#asd">asd</Item>
