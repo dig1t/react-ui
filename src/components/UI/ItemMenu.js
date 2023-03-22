@@ -1,42 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react'
-import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-const TOOLTIP_OFFSET = 10
+import Portal from './Portal.js'
 
 const ItemMenu = props => {
-	return <ul>{props.children}</ul>
+	return <ul className="menu">{props.children}</ul>
 }
 
 const Item = props => {
-	return <li>{props.children}</li>
+	return <li>
+		<a href={props.link}>{props.children}</a>
+	</li>
 }
 
-const getDOMRoot = () => {
-	const res = document.getElementById('ui-root')
-	
-	if (res) return res
-	
-	const root = document.createElement('div')
-	root.setAttribute('id', 'ui-root')
-	document.body.appendChild(root)
-	
-	return root
+Item.propTypes = {
+	link: PropTypes.string
 }
+
+const ItemDivider = () => <li className="divider" />
 
 const Menu = (props, ref) => {
-	const root = useRef()
 	const menuElement = useRef()
-	const [position, setPosition] = useState('top')
 	const [pos, setPos] = useState({ x: 0, y: 0 })
-	const [mounted, setMounted] = useState(false)
 	
 	useEffect(() => {
-		root.current = getDOMRoot()
-		
-		setMounted(true)
-		
 		if (!menuElement.current || !props.parentRef.current) return
 		
 		const parentRect = props.parentRef.current.getBoundingClientRect()
@@ -44,50 +32,60 @@ const Menu = (props, ref) => {
 		const width = menuElement.current.offsetWidth
 		const height = menuElement.current.offsetHeight
 		
-		let x = parentRect.left + (parentRect.width / 2) - (width / 2)
-		let y = parentRect.top - height - TOOLTIP_OFFSET
-		let newPosition = 'bottom'
+		let x = parentRect.left + (parentRect.width / 2) - (width / 2) + props.sideOffset
+		let y = parentRect.top - height - props.offset
 		
-		if (y < 0) {
-			y = parentRect.top + parentRect.height + TOOLTIP_OFFSET
-			x = (parentRect.left + (parentRect.width / 2)) - (width / 2)
-			newPosition = 'top'
+		if (props.position === 'bottom' || (!props.position && y < 0)) {
+			y = parentRect.top + parentRect.height + props.offset
+			x = (parentRect.left + (parentRect.width / 2)) - (width / 2) - props.sideOffset
 		}
 		
-		if (x > window.innerWidth || menuElement.current.offsetWidth + x > window.innerWidth) {
-			x = parentRect.left - width - TOOLTIP_OFFSET
-			y = parentRect.top - (height / 2) + (parentRect.height / 2)
-			newPosition = 'right'
+		if (props.position === 'left' || (!props.position && (
+			x > window.innerWidth || menuElement.current.offsetWidth + x > window.innerWidth
+		))) {
+			x = parentRect.left - width - props.offset
+			y = parentRect.top - (height / 2) + (parentRect.height / 2) - props.sideOffset
 		}
 		
-		if (x < 0 || menuElement.current.offsetWidth + x > window.innerWidth) {
-			x = parentRect.left + parentRect.width + TOOLTIP_OFFSET
-			y = parentRect.top - (height / 2) + (parentRect.height / 2)
-			newPosition = 'left'
+		if (props.position === 'right' || (!props.position && (
+			x < 0 || menuElement.current.offsetWidth + x > window.innerWidth
+		))) {
+			x = parentRect.left + parentRect.width + props.offset
+			y = parentRect.top - (height / 2) + (parentRect.height / 2) + props.sideOffset
 		}
 		
 		setPos({ x, y })
-		setPosition(newPosition)
 	}, [props, menuElement, ref])
 	
-	return root.current ? ReactDOM.createPortal(
-		<div
-			ref={menuElement}
-			className={classNames('drop-menu', position)}
-			style={{ left: pos.x, top: pos.y }}
-		>
-			<div className="nub" />
-			<span>{props.text}</span>
-		</div>,
-		root.current
-	) : <></>
+	return <Portal>
+		{props.open && <div className={classNames('drop-menu')}>
+			<div
+				className="background-close"
+				role="button"
+				onClick={input => props.toggleMenu(input)}
+			/>
+			<div
+				ref={menuElement}
+				className="menu-container"
+				style={{ left: pos.x, top: pos.y }}
+			>
+				{props.menu}
+			</div>
+		</div>}
+	</Portal>
+}
+
+Menu.defaultProps = {
+	offset: 10,
+	sideOffset: 0
 }
 
 Menu.propTypes = {
 	open: PropTypes.bool.isRequired,
 	menu: PropTypes.object.isRequired,
 	parentRef: PropTypes.object.isRequired,
-	position: PropTypes.number
+	position: PropTypes.string,
+	offset: PropTypes.number
 }
 
 const DropMenu = props => {
@@ -98,18 +96,23 @@ const DropMenu = props => {
 	const [open, setOpen] = useState(false)
 	const ref = useRef()
 	
-	return <span
-		ref={ref}
-		
-		onClick={() => setOpen(true)}
-	>
+	return <>
+		<span
+			ref={ref}
+			onClick={() => setOpen(true)}
+		>{props.children}</span>
 		<Menu
 			{...props}
 			parentRef={ref}
+			toggleMenu={input => {
+				input.preventDefault()
+				input.stopPropagation()
+				
+				setOpen(!open)
+			}}
 			open={open}
 		/>
-		{props.children}
-	</span>
+	</>
 }
 
 DropMenu.defaultProps = {
@@ -117,8 +120,8 @@ DropMenu.defaultProps = {
 }
 
 DropMenu.propTypes = {
-	component: PropTypes.func
+	menu: PropTypes.object.isRequired
 }
 
-export { ItemMenu, Item }
+export { ItemMenu, Item, ItemDivider }
 export default DropMenu

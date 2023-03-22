@@ -1,30 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import ReactDOM from 'react-dom'
+import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-const getDOMRoot = () => {
-	const res = document.getElementById('ui-root')
-	
-	if (res) return res
-	
-	const root = document.createElement('div')
-	root.setAttribute('id', 'ui-root')
-	document.body.appendChild(root)
-	
-	return root
-}
+import Portal from './Portal.js'
 
 const Modal = props => {
-	const root = useRef()
-	const [mounted, setMounted] = useState(false)
-	
-	useEffect(() => {
-		// Mounted
-		root.current = getDOMRoot()
-		setMounted(true)
-	}, [])
-	
 	const modalComponent = useMemo(() => {
 		switch(props.type) {
 			case 'image': {
@@ -34,29 +14,28 @@ const Modal = props => {
 		}
 	}, [props])
 	
-	
-	return mounted && props.open ? ReactDOM.createPortal(
-		<div
-			className={classNames(
-				'modal',
-				`modal-${props.type}`
-			)}
+	return <Portal>
+		{props.open && <div
+			className={classNames('modal', `modal-${props.type}`)}
 		>
-			<div className="background-close" onClick={input => {
-				console.log(input)
-				props.toggleModal()
-			}} />
-			<button className="close fas fa-times" onClick={props.toggleModal} />
-			<div className="align">
+			<div
+				className="background-close"
+				role="button"
+				onClick={input => props.toggleModal(input)}
+			/>
+			<button
+				className="close fas fa-times"
+				onClick={input => props.toggleModal(input)}
+			/>
+			<div className="center-wrap">
 				<div className="container">
 					<div className="main">
 						<div className="content">{modalComponent}</div>
 					</div>
 				</div>
 			</div>
-		</div>,
-		root.current
-	) : <></>
+		</div>}
+	</Portal>
 }
 
 Modal.propTypes = {
@@ -71,18 +50,19 @@ const ModalWrap = props => {
 	
 	const [open, setOpen] = useState(false)
 	
-	return props.inlineTrigger ? <span
-		onClick={() => setOpen(prevState => {
-			return !prevState
-		})}
-	>
+	return props.inlineTrigger ? <>
 		<Modal
-			toggleModal={() => setOpen(!open)}
 			{...props}
+			toggleModal={input => {
+				input.preventDefault()
+				input.stopPropagation()
+				
+				setOpen(!open)
+			}}
 			open={open}
 		/>
-		{props.children}
-	</span> : props.children
+		<span onClick={() => setOpen(true)} >{props.children}</span>
+	</> : props.children
 }
 
 ModalWrap.defaultProps = {

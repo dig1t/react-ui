@@ -1,10 +1,12 @@
 import Tooltip from '../components/UI/Tooltip.js'
 import Modal from '../components/UI/Modal.js'
 
-import DropMenu, { ItemMenu, Item } from '../components/UI/ItemMenu.js'
+import DropMenu, { ItemMenu, Item, ItemDivider } from '../components/UI/ItemMenu.js'
 
-const Menu = <ItemMenu text="hello world">
-  <Item redirect="#asd">asd</Item>
+const Menu = <ItemMenu>
+  <Item link="#asd">asd</Item>
+  <ItemDivider />
+  <Item link="#logout">Logout</Item>
 </ItemMenu>
 
 export default function Home() {
@@ -22,9 +24,7 @@ export default function Home() {
             type="image"
             image="https://i.imgur.com/bgqfx8U.png"
           >
-            <button onClick={() => {
-              console.log('show modal')
-            }}>modal</button>
+            <button>modal</button>
           </Modal>
         </div>
         

@@ -4,8 +4,6 @@ import classNames from 'classnames'
 
 import Portal from './Portal.js'
 
-const TOOLTIP_OFFSET = 10
-
 const Tooltip = (props, ref) => {
 	const tooltipElement = useRef()
 	const [nubPosition, setNubPosition] = useState(props.position)
@@ -20,52 +18,56 @@ const Tooltip = (props, ref) => {
 		const height = tooltipElement.current.offsetHeight
 		
 		let x = parentRect.left + (parentRect.width / 2) - (width / 2)
-		let y = parentRect.top - height - TOOLTIP_OFFSET
-		let newNubPosition = 'bottom'
+		let y = parentRect.top - height - props.offset
+		setNubPosition('bottom')
 		
 		if (props.position === 'bottom' || (!props.position && y < 0)) {
-			y = parentRect.top + parentRect.height + TOOLTIP_OFFSET
+			y = parentRect.top + parentRect.height + props.offset
 			x = (parentRect.left + (parentRect.width / 2)) - (width / 2)
-			newNubPosition = 'top'
+			setNubPosition('top')
 		}
 		
 		if (props.position === 'left' || (!props.position && (
 			x > window.innerWidth || tooltipElement.current.offsetWidth + x > window.innerWidth
 		))) {
-			x = parentRect.left - width - TOOLTIP_OFFSET
+			x = parentRect.left - width - props.offset
 			y = parentRect.top - (height / 2) + (parentRect.height / 2)
-			newNubPosition = 'right'
+			setNubPosition('right')
 		}
 		
 		if (props.position === 'right' || (!props.position && (
 			x < 0 || tooltipElement.current.offsetWidth + x > window.innerWidth
 		))) {
-			x = parentRect.left + parentRect.width + TOOLTIP_OFFSET
+			x = parentRect.left + parentRect.width + props.offset
 			y = parentRect.top - (height / 2) + (parentRect.height / 2)
-			newNubPosition = 'left'
+			setNubPosition('left')
 		}
 		
 		setPos({ x, y })
-		setNubPosition(newNubPosition)
 	}, [props, tooltipElement, ref])
 	
 	return <Portal>
-		{props.open ? <div
+		{props.open && <div
 			ref={tooltipElement}
 			className={classNames('tooltip', nubPosition)}
 			style={{ left: pos.x, top: pos.y }}
 		>
 			<div className="nub" />
 			<span>{props.text}</span>
-		</div> : <></>}
+		</div>}
 	</Portal>
+}
+
+Tooltip.defaultProps = {
+	offset: 10
 }
 
 Tooltip.propTypes = {
 	open: PropTypes.bool.isRequired,
 	text: PropTypes.string.isRequired,
 	parentRef: PropTypes.object.isRequired,
-	position: PropTypes.string
+	position: PropTypes.string,
+	offset: PropTypes.number
 }
 
 const TooltipWrap = props => {
