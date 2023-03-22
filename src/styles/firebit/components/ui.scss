@@ -301,48 +301,6 @@ $tooltip-padding: .4rem;
 	}
 }
 
-.drop-down {
-	background-color: #fff;
-	width: 150px;
-	border: 1px solid #ddd;
-	border-radius: $border-radius;
-	padding: 6px 0;
-	position: relative;
-	left: -64px;
-	top: 100%;
-	z-index: 100;
-	display: none;
-	
-	li {
-		&:not([class]) {
-			height: 24px;
-			text-align: center;
-			font-size: 15px;
-			
-			&:hover {
-				background-color: #ddd;
-			}
-			
-			a {
-				color: #333;
-				line-height: 24px;
-				text-align: center;
-				text-decoration: none;
-				display: block;
-			}
-		}
-	}
-	
-	.fa {
-		color: #666;
-		margin: 0 -8px;
-		position: relative;
-		left: 32px;
-		float: left;
-		line-height: 24px;
-	}
-}
-
 .carousel {
 	//overflow: hidden;
 	
